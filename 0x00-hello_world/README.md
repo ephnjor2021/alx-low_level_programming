@@ -4,3 +4,4 @@
 3-name
 4-puts
 5-printf
+6-size.c
