@@ -1,50 +1,43 @@
 #include "main.h"
-/**
- * length - helps do it
- * @s: string
- * Return: string length
- */
-int length(char *s)
-{
-	int i = 0;
 
-	if (*s)
-	{
-		i = i + length(s + 1);
-		return (i += 1);
-	}
-	return (0);
+int is_divisible(int num, int div);
+int is_prime_number(int n);
+
+/**
+ * is_divisible - Checks if a number is divisible.
+ * @num: The number to be checked.
+ * @div: The divisor.
+ *
+ * Return: If the number is divisible - 0.
+ *         If the number is not divisible - 1.
+ */
+int is_divisible(int num, int div)
+{
+	if (num % div == 0)
+		return (0);
+
+	if (div == num / 2)
+		return (1);
+
+	return (is_divisible(num, div + 1));
 }
-/**
- * helper2 - helps more
- * @i: integer i
- * @s: string
- * Return: int value
- */
-int helper2(int i, char *s)
-{
-	if (*s)
-	{
-		if (*s != s[length(s) - i])
-		{
-			return (0);
-		}
-		else
-		{
-			return (helper2(i + 1, s + 1));
-		}
-	}
-	return (1);
-}
-/**
- * is_palindrome - is it paldindrome
- * @s: string to check
- * Return: boolean
- */
-int is_palindrome(char *s)
-{
-	int i = 1;
 
-	return (helper2(i, s));
+/**
+ * is_prime_number - Checks if a number is prime.
+ * @n: The number to be checked.
+ *
+ * Return: If the integer is not prime - 0.
+ *         If the number is prime - 1.
+ */
+int is_prime_number(int n)
+{
+	int div = 2;
 
+	if (n <= 1)
+		return (0);
+
+	if (n >= 2 && n <= 3)
+		return (1);
+
+	return (is_divisible(n, div));
 }
