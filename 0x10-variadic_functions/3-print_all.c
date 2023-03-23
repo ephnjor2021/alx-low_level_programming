@@ -1,92 +1,91 @@
-#include "variadic_functions.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
-
+#include <stdlib.h>
+#include <stdio.h>
+#include "variadic_functions.h"
 /**
- * print_char - print char
- * @args: list of arguments
+ * print_c - prints char
+ * @a: list to give
+ * Return: always 0
  */
-
-void print_char(va_list args)
+int print_c(va_list a)
 {
-	printf("%c", va_arg(args, int));
+	printf("%c", va_arg(a, int));
+	return (0);
 }
-
 /**
- * print_int - print int
- * @args: list of arguments
+ * print_i - prints int
+ * @a: list to give
+ * Return: always 0
  */
-
-void print_int(va_list args)
+int print_i(va_list a)
 {
-	printf("%d", va_arg(args, int));
+	printf("%d", va_arg(a, int));
+	return (0);
 }
-
 /**
- * print_float - print float
- * @args: list of arguments
+ * print_f - prints float
+ * @a: list to give
+ * Return: always 0
  */
-
-void print_float(va_list args)
+int print_f(va_list a)
 {
-	printf("%f", va_arg(args, double));
+	printf("%f", va_arg(a, double));
+	return (0);
 }
-
 /**
- * print_string - print string
- * @args: list of arguments
+ * print_s - prints string
+ * @a: list to give
+ * Return: always 0
  */
-
-void print_string(va_list args)
+int print_s(va_list a)
 {
-	char *s = va_arg(args, char *);
+	char *s;
 
+	s = va_arg(a, char *);
 	if (s == NULL)
 	{
 		printf("(nil)");
-		return;
+		return (0);
 	}
 	printf("%s", s);
+	return (0);
 }
-
 /**
- * print_all - prints anything*
- * @format: list of types of arguments
+ * print_all - prints all
+ * @format: format string that says arg types
+ *
  */
-
 void print_all(const char * const format, ...)
 {
-	va_list args;
 	int i, j;
-	char *s1 = "";
-	char *s2 = ", ";
-
-	op_t ops[] = {
-		{'c', print_char},
-		{'i', print_int},
-		{'f', print_float},
-		{'s', print_string},
-		{'\0', NULL}
+	char *sep = "";
+	char *sep2 = ", ";
+	va_list anyArgs;
+	printer ops[] = {
+		{"c", print_c},
+		{"i", print_i},
+		{"s", print_s},
+		{"f", print_f},
+		{NULL, NULL}
 	};
 
-	va_start(args, format);
+	va_start(anyArgs, format);
 	i = 0;
-	while (format != NULL && format[i] != '\0')
+	while (format != NULL && format[i])
 	{
 		j = 0;
-		while (ops[j].c != '\0')
+		while (ops[j].f != NULL)
 		{
-			if (ops[j].c == format[i])
+			if (format[i] == *(ops[j].c))
 			{
-				printf("%s", s1);
-				ops[j].f(args);
-				s1 = s2;
+				printf("%s", sep);
+				ops[j].f(anyArgs);
 			}
 			j++;
 		}
+		sep = sep2;
 		i++;
 	}
 	printf("\n");
-	va_end(args);
+	va_end(anyArgs);
 }
