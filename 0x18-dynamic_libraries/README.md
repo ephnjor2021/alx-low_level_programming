@@ -1,1 +1,1 @@
-libdynamic.so
+libmy.a
