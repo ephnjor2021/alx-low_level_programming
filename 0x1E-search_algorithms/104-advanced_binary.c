@@ -1,61 +1,69 @@
 #include "search_algos.h"
-void print_array(int *array, int left, int right);
+
 /**
-* advanced_binary - searches for a value in an array of
-* integers using the binary search algorithm
-* @array: is a pointer to the first element of the array to search in
-* @size: the nmber of elements in array
-* @value: is the value to search for
-* Return: If value is not present in array or if array
-* is NULL, your function must return -1
-*/
+ * advanced_binary - search algorithm
+ * @array: array of integer values
+ * @size: size of the array
+ * @value: to find matching element
+ *
+ * Description: Recursively split array in halfs until matching elem found
+ * Return: -1 if value not present or array is NULL OR index if found
+ */
 int advanced_binary(int *array, size_t size, int value)
 {
-	if (array == NULL)
+	if (array == NULL || size == 0)
 		return (-1);
-	return (binary_search_rec(array, 0, (int)size - 1, value));
+
+	return (bs_helper2(array, value, 0, size - 1));
 }
 
 /**
-* binary_search_rec - recursion for binary search algorithm
-* @array: is a pointer to the first element of the array to search in
-* @left: the less index of the array
-* @right: the highest index of the array
-* @value: is the value to search for
-* Return: If value is not present in array return -1
-*/
-int binary_search_rec(int *array, int left, int right, int value)
+ * bs_helper2 - helper for search algorithm
+ * @array: array of integer values
+ * @key: value to match element
+ * @low: lower half of subarray
+ * @high: upper half of subarray
+ *
+ * Description: Recursively split array in halfs until matching elem found
+ * Return: -1 if value not present or array is NULL OR index if found
+ */
+int bs_helper2(int *array, int key, int low, int high)
 {
-	int mid = left + (right - left) / 2;
+	int mid;
 
-	print_array(array, left, right);
-	if (array[mid] == value)
+	if (high >= low)
 	{
-		if (array[mid - 1] == value && array[mid - 1] != 0)
-		{
-			return (binary_search_rec(array, left, mid - 1, value));
-		}
-		return (mid);
+		mid = low + (high - low) / 2;
+		helper2(array, low, high);
+		if ((mid == 0 || key > array[mid - 1]) && array[mid] == key)
+			return (mid);
+		else if (key > array[mid])
+			return (bs_helper2(array, key, (mid + 1), high));
+		else
+			return (bs_helper2(array, key, low, mid));
 	}
-	if (left >= right)
-		return (-1);
-	if (array[mid] < value)
-		return (binary_search_rec(array, mid + 1, right, value));
-	return (binary_search_rec(array, left, mid - 1, value));
+	return (-1);
 }
 
 /**
-* print_array - print the array
-* @array: is a pointer to the first element of the array to search in
-* @left: the less index of the array
-* @right: the highest index of the array
-*/
-void print_array(int *array, int left, int right)
+ * helper2 - search algorithm
+ * @array: array of integer values
+ * @low: lower half of subarray
+ * @high: upper half of subarray
+ *
+ * Description: print sub array for each call
+ * Return: na voided function
+ */
+void helper2(int *array, int low, int high)
 {
-	int i = left;
+	int i;
 
 	printf("Searching in array: ");
-	for (; i < right; i++)
-		printf("%d, ", array[i]);
-	printf("%d\n", array[i]);
+	for (i = low; i <= high; i++)
+	{
+		printf("%d", array[i]);
+		if (i != high)
+			printf(", ");
+	}
+	printf("\n");
 }
